@@ -1,0 +1,50 @@
+﻿@using Azure.Communication.Chat;
+@model InputMessage 
+@{
+    ViewData["Title"] = "User";
+}
+
+<h1>User Threads</h1>
+<body>
+    @{
+
+        User user = ViewBag.user;
+        int threadIndex = 0;
+        //string[] abc = { "abc", "def" };
+        //Or
+        //Customer customer =ViewData.Model;
+
+        <p>UserId :@user.UserID </p>
+        <p>Name :@user.Name </p>
+
+        @foreach (ChatThread thread in user.Threads)
+        {
+            <p>Thread Name :@thread.Topic</p>
+            <div class="messageBox">
+                <ul>
+                    @for (int i = thread.Messages.Count-1 ; i >= 0; i--)
+                    {
+                        <li>Sent by @thread.Messages[i].SenderDisplayName : @thread.Messages[i].Content.Message at @thread.Messages[i].CreatedOn.ToString()</li>
+                    }
+                </ul>
+            </div>
+            <form action="/home/User" method="post">
+                <input id="Message" name="Message" type="text" value="" placeholder="Type new message">
+                <input data-val="true" data-val-required="The ThreadIndex field is required." id="ThreadIndex" name="ThreadIndex" type="hidden" value=@threadIndex>                
+                <input type="submit">
+            </form>
+            
+            <br>
+            threadIndex += 1;
+        }
+    }
+
+    <script>
+        var divs = document.getElementsByClassName('messageBox');
+        for (var i = 0; i < divs.length; i++) {
+            divs[i].scrollTop = divs[i].scrollHeight;
+        }
+        console.log("js is working");
+        
+    </script>
+</body>
